@@ -68,15 +68,15 @@ Point cloud registration can be executed as part of the 3D-SeqFISH pipeline. It 
 For more accurately register the point clouds of multiple rounds, we also apply deep-learning based registeration method here ([RPMnet](https://github.com/yewzijian/RPMNet) and [PCRnet](https://github.com/vinits5/pcrnet) appeal to be the ideal options for a better registration).
 
 ### Barcoding and decoding analysis #
-We adapted the idea of [seqFISH][seqFISH-PLUS](https://github.com/CaiGroup/seqFISH-PLUS) and [HCR 3.0] (https://www.molecularinstruments.com/hcr-rnafish-products) for our 3D-seqFISH experiments. For barcoding the genes, we used 3 different channel/colors will be used and 4 rounds will be run. 1-3 extra rounds will be conducted for error corrections. <br/>
-For encoding the genes, we modified SeqFISH design by using a best threshold radius for determine the colocalized spots of each rounds (see Youden J's metrics). <br/>
+We adapted the idea of [seqFISH](https://github.com/CaiGroup/seqFISH-PLUS) and [HCR 3.0](https://www.molecularinstruments.com/hcr-rnafish-products) for our 3D-seqFISH experiments. For barcoding the genes, we used 3 different channel/colors will be used and 4 rounds will be run. 1-3 extra rounds will be conducted for error corrections. <br/>
+For encoding the genes, we modified SeqFISH design by using a best threshold radius for determine the colocalized spots of each rounds (see [Youden's J Statistic](https://www.kaggle.com/code/willstone98/youden-s-j-statistic-for-threshold-determination/notebook)). <br/>
 For increase the detection efficency, the nearest 3 spots for a specific bit will be used for find the most correlated code for a specific gene. <br/>
 
 ## Pipeline #
 We build a self-contained, highly flexible, and platform agnostic computational [pipeline](https://github.com/JaneliaSciComp/multifish), which supports turnkey 3D-SeqFISH analysis on local machines and the High performance compute cluster (such as Slurm or LSF). The pipeline is freely available, open source, and modular. It can rapidly process large datasets greater than 10 TB in size with minimal manual intervention. The pipeline can be used to analyze EASI-FISH dataset end-to-end. It takes `czi` image files acquired from Zeiss Z.1 lightsheet microscope as input and outputs 1) processed image data at different scales and 2) transcript counts that can be readily used for cell type identification. The pipeline also provides options to run individual analysis modules, such as image stitching or registration. 
 
 ### Example data #
-3D-SeqFISH [example datasets] We provide the related images and point clouds of a example Cell 5# for testing the 3D registration.See the description later. <br/>
+We provide the related images and point clouds of a example Cell 5# for testing the 3D registration. Stay tuned to the description later. <br/>
 Example images [example datasets](https://doi.org/10.25378/janelia.c.5276708.v1) are provided for software testing. For instructions on performing a demo run with the example data using the end-to-end EASIFISH pipeline, see [here](https://github.com/JaneliaSciComp/multifish). 
 
 ### Jupyter notebooks #
@@ -99,3 +99,8 @@ Code used for [Post processing](https://github.com/multiFISH/EASI-FISH/tree/mast
 **EASI-FISH for thick tissue defines lateral hypothalamus spatio-molecular organization** <br/>
 *Yuhan Wang, Mark Eddison, Greg Fleishman, Martin Weigert, Shengjin Xu, Fredrick E. Henry, Tim Wang, Andrew L. Lemire, Uwe Schmidt, Hui Yang, Konrad Rokicki, Cristian Goina, Karel Svoboda, Eugene W. Myers, Stephan Saalfeld, Wyatt Korff, Scott M. Sternson, Paul W. Tillberg* <br/>
 https://www.sciencedirect.com/science/article/pii/S0092867421013398
+
+### Contributors#
+Zhenggang Zhu
+Charlotte Wang
+Yuhan Wang

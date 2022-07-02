@@ -22,6 +22,7 @@ Deep-learning based Point cloud registration (e.g., RPMnet and PCRnet)
 Barcoding and decoding analysis
 
 **Example**
+
 Jupyter notebooks and Sample data
 
 _Now, ROI_ransac_napari_fixmovROI.ipynb is the major python scripts for processing the 3d registration of FISH point clouds._
@@ -29,6 +30,7 @@ _Now, ROI_ransac_napari_fixmovROI.ipynb is the major python scripts for processi
 Pipeline executed with Bash command
 
 **Additional information**
+
 Visualization
 
 Post processing

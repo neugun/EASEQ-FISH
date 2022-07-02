@@ -1,24 +1,22 @@
 ## 3D-SeqFISH analysis toolbox
 
-See [here](https://github.com/JaneliaSciComp/multifish) for active EASI-FISH pipeline updates. 
-
 ## Table of Contents #
    * [Description](#description)
    * [Installation](#Installation)
    * [Modules](#modules)
-      * [Preprocessing with EASIFISH Pipeline](#EASIFISH Pipeline)
-      * [Warp Mask and Spot assignment](#Warp Mask and Spot assignment)
-      * [Classic Point cloud registration](#Classic Point cloud registration)
-      * [Deep-learning based Point cloud registration](#Deep-learning based Point cloud registration)
-      * [Barcoding and decoding analysis](#Barcoding and decoding analysis)
+      * [Preprocessing with EASIFISH Pipeline](#EASIFISH-Pipeline)
+      * [Spot assignment](#spot-assignment)
+      * [Classic Point cloud registration](#classic-point-cloud-registration)
+      * [Deep-learning based Point cloud registration](#deep-learning)
+      * [Barcoding and decoding analysis](#barcoding-and-decodinganalysis)
    * [Pipeline](#pipeline)
-      * [Example data](#Example data)
-      * [Jupyter notebooks](#Jupyter notebooks)
-      * [Bash command](#Bash command)
+      * [Example data](#example-data)
+      * [Jupyter notebooks](#jupyter-notebooks)
+      * [Bash command](#bash-command)
    * [Additional information](#additional-information)
       * [Visualization](#visualization)
       * [Post processing](#post-processing)  
-      * [Reference](#Reference)
+      * [Reference](#reference)
 
 ## Description #
 
@@ -47,14 +45,15 @@ It is largely based on EASIFISH, MULTIFISH, bigstream, napari, Point cloud regis
 ## Modules #
 
 ### Preprocessing with EASIFISH Pipeline #
-
+See [here](https://github.com/multiFISH/EASI-FISH) for active EASI-FISH pipeline updates. 
+See [here](https://github.com/JaneliaSciComp/multifish) for active MULTIFISH pipeline updates. 
 For imaging large volumes, multiple sub-volumes (tiles) are sequentially acquired, followed by computational stitching into a single large image. We used an Apache Spark-based high-performance stitching pipeline ([Gao et al., 2019](https://science.sciencemag.org/content/363/6424/eaau8302.long)). The pipeline automatically performs a flat-field correction for each tile to account for intensity variations across the lightsheet. It then derives the globally optimal translation for each tile that minimizes the sum of square distances to competing optimal pairwise translations estimated by phase-correlation ([Preibisch et al., 2009](https://academic.oup.com/bioinformatics/article/25/11/1463/332497)).The stitching module can be executed with the EASI-FISH pipeline (see above). For additional details, please see [stitching-spark](https://github.com/saalfeldlab/stitching-spark).
 For coarsely register images, We developed [BigStream](https://github.com/GFleishman/bigstream) for robust and fully automated non-rigid registration of multi-round FISH data. BigStream first performs fast global affine transformation using a feature-based random sample consensus (RANSAC) algorithm. The image volume is then divided into overlapping blocks and another round of feature-based affine transformation is performed, followed by a fast 3D deformable registration [greedypy](https://github.com/GFleishman/greedypy) ([Yushkevich, 2016](https://github.com/pyushkevich/greedy)) on each block. Bigstream can be executed as part of the EASI-FISH pipeline. It also can be installed and used seperately. 
 For 3D segmentation, [Starfinity](https://github.com/mpicbg-csbd/stardist/tree/refinement) is a deep learning-based automatic 3D segmentation software. Starfinity is an extension of [Stardist](https://github.com/mpicbg-csbd/stardist), an earlier cell detection approach (Schmidt et al., 2018; Weigert et al., 2020) and is based on the dense prediction of cell border distances and their subsequent aggregation into pixel affinities. A starfinity [model](https://doi.org/10.25378/janelia.13624268) was trained to predict cell body shapes from DAPI-stained RNA images and is provided for testing. Starfinity can be executed as part of the EASI-FISH pipeline. It can also be installed and used independently. 
 For distributed spot detection, we used [RS-FISH](https://github.com/PreibischLab/RS-FISH) and our developed hAirlocalize, methods based on the JAVA and MATLAB spot detection algorithm. [Airlocalize](https://github.com/timotheelionnet/AIRLOCALIZE)([Lionnet et al., 2011](https://www.nature.com/articles/nmeth.1551)) to allow rapid spot detection on full-resolution large image datasets. hAirlocalize can be executed independently or as part of the EASI-FISH pipeline (see above). For independent execution, we recommend working with the n5 filesystem due to large file size.
 ![](/Diagrams/Pipeline.gif). 
 
-### Warp Mask and Spot assignment #
+### Spot assignment #
 For extracting the point clouds to do the 3D registrataion, a necessary step is to assign the spots for cell masks of the fixed and moving rounds. We used the inverse tranformation exported from the above bigstream registration and warp the cell mask of the fixed rounds to get the mask of moving rounds images.The spots will be assigned to these new cell masks.
 
 ### Classic Point cloud registration #

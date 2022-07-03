@@ -26,11 +26,11 @@
 The 3D-SeqFISH analysis toolbox integrate EASIFISH (Expansion-Assisted Iterative Fluorescence *In Situ* Hybridization) pipeline and 3D registration method for analyzing image-based 3D spatial transcriptomic data. We aim to provide the general solution for 3D spatial transcriptome, including automated image stitching, 3D cell segmentation, distributed spot detection, and distributed and highly accurate multi-round 3D FISH spot registration (nm-level accuracy), and decoding analysis.  <br/><br/>
 ![](/Diagrams/3DseqFISH_diagram_v1.png)
 
-### News (and plans)#
+### News (and plans) #
 - Released the 3D-SeqFISH github page on 7/2/22
+- Add 3D-SeqFISH individual scripts on 7/3/22
 - Test PFH and FPFH on 7/3/22
-- Grouped registration evaluation on 7/3/22
-- Add 3D-SeqFISH core scripts on 7/3/22
+- Grouped registration scripts and evaluation on 7/3/22
 - Test RANSAC-ICP on 7/4/22
 - Generate shuffle point clouds on 7/6/22
 - Determine the threshold for radius on 7/9/22
@@ -87,7 +87,7 @@ Preprocessing for 3D-SeqFISH is based on EASIFISH (Expansion-Assisted Iterative 
 - For more accurately register the point clouds of multiple rounds, we also apply deep-learning based [registeration method](https://github.com/vinits5/learning3d#use-of-registration-networks). [RPMnet](https://github.com/yewzijian/RPMNet) and [PCRnet](https://github.com/vinits5/pcrnet) appeal to be the ideal options for a better registration.
 
 ### Barcoding and decoding analysis #
-- We borrow the idea of [seqFISH](https://github.com/CaiGroup/seqFISH-PLUS) and [HCR 3.0](https://www.molecularinstruments.com/hcr-rnafish-products) for our 3D-seqFISH experiments. For barcoding the genes, 3 different channels of lightsheet microscope will be used and 4-5 rounds of FISH will be run for encoding 81-243 genes. 2-6 extra rounds will be conducted for error corrections, examine the decoding efficiency and probe the dense expressed genes. <br/>
+- We benefit from the idea of [seqFISH](https://github.com/CaiGroup/seqFISH-PLUS) and [HCR 3.0](https://www.molecularinstruments.com/hcr-rnafish-products) for our 3D-seqFISH experiments. For barcoding the genes, 3 different channels of lightsheet microscope will be used and 4-5 rounds of FISH will be run for encoding 81-243 genes. 2-6 extra rounds will be conducted for error corrections, examine the decoding efficiency and probe the dense expressed genes. <br/>
 - For decoding the genes, we modify the SeqFISH design by using a best threshold radius for determine the colocalized spots of each rounds (see [Youden's J Statistic](https://www.kaggle.com/code/willstone98/youden-s-j-statistic-for-threshold-determination/notebook)). <br/>
 - For increase the detection efficency, the nearest 3 spots for a specific barcode bit will be used for searching the most correlated code of a specific gene. <br/>
 

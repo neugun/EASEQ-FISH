@@ -25,7 +25,7 @@ This 3D-SeqFISH analysis toolbox is a integrated SeqFISH analysis method for 3D 
 
 ## Installation #
 
-`Point cloud registration and decoding scripts are inspired by SeqFISH and 3D-SeqFISH` can be installed with `pip`:
+`3D-SeqFISH` are inspired by SeqFISH and Point cloud registration and seqFISH decoding method, and it can be installed with `pip`:
 ```
    pip install 3D-SeqFISH
 ```
@@ -56,12 +56,12 @@ For distributed spot detection, we used [RS-FISH](https://github.com/PreibischLa
 ![](/Diagrams/Pipeline.gif) 
 
 ### Spot assignment #
-For extracting the point clouds to do the 3D registrataion, a necessary step is to assign the spots for cell masks of the fixed and moving rounds. We used the inverse tranformation exported from the above bigstream registration and warp the cell mask of the fixed rounds to get the mask of moving rounds images.The spots will be assigned to these new cell masks.
+For extracting the point clouds to do the 3D registrataion, we used the inverse tranformation exported from the above bigstream registration to warp the cell mask of the fixed rounds. Then, we we assign the spots for cell masks of the fixed and moving rounds. The spots will be assigned to these new cell masks.
 
 ### Classic Point cloud registration #
-For accurately register the point clouds of multiple rounds, we apply methods for register the FISH spots with the classic linear registration methods. Ransac is a powerful tool for coarsely registered the spots, ICP then will be used for a fine registration. <br/>
+For accurately register the point clouds of multiple rounds, we apply classic linear registration methods methods for register the FISH spots.  <br/>
 For registering the sequentially 3-channel acquired FISH images, we first correct the chromatic abberation, registered the DAPI channel, apply the DAPI transformation to each FISH channel, and finally do the point cloud registration for all FISH channels of all rounds. <br/>
-Point cloud registration method first performs fast global affine transformation using a feature-based random sample consensus (RANSAC) algorithm. The pipeline then derives the globally optimal transformation for each cell that minimizes the sum of square distances to competing optimal affine matrix. <br/>
+Random sample consensus (RANSAC) is a powerful tool for coarsely registered the spots, ICP then will be used for a fine registration. Point cloud registration method first performs fast global affine transformation using a feature-based RANSAC algorithm. ICP then derives the globally optimal transformation for each cell that minimizes the sum of square distances to competing optimal affine matrix. <br/>
 Point cloud registration can be executed as part of the 3D-SeqFISH pipeline. It also can be installed and used seperately. 
 ![](/Diagrams/3DseqFISH_diagram_v1_DAPI.png)
 
@@ -103,6 +103,6 @@ Code used for [Post processing](https://github.com/multiFISH/EASI-FISH/tree/mast
 https://www.sciencedirect.com/science/article/pii/S0092867421013398
 
 ### Contributors#
-Zhenggang Zhu
-Charlotte Wang
-Yuhan Wang
+Zhenggang Zhu <br/>
+Charlotte Wang <br/>
+Yuhan Wang <br/>

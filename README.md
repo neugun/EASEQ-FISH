@@ -17,6 +17,7 @@
       * [Visualization](#visualization)
       * [Post processing](#post-processing)  
       * [Reference](#reference)
+      * [Contributors](#contributors)
 
 ## Description #
 
@@ -103,4 +104,3 @@ https://www.sciencedirect.com/science/article/pii/S0092867421013398
 ### Contributors#
 Zhenggang Zhu <br/>
 Charlotte Wang <br/>
-Yuhan Wang <br/>

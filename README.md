@@ -50,7 +50,7 @@ Preprocessing for 3D-SeqFISH is based on EASIFISH (Expansion-Assisted Iterative 
 
 ### Preprocessing with EASIFISH Pipeline #
 
-![](/Diagrams/Pipeline.gif)
+![](/Diagrams/3DseqFISH_diagram_v1_EASIFISH.png)
 See updates for [EASI-FISH pipeline] (https://github.com/multiFISH/EASI-FISH), and [MULTIFISH pipeline](https://github.com/JaneliaSciComp/multifish). <br/>
 For imaging large volumes, multiple sub-volumes (tiles) are sequentially acquired with 3X Expansion microscopy, followed by [computational stitching](https://science.sciencemag.org/content/363/6424/eaau8302.long) into a single large image. For independent execution, we recommend working with the n5 filesystem due to large file size. <br/>
 The stitching module can be executed with the EASI-FISH pipeline (see above). For coarsely registering images, we used [BigStream](https://github.com/GFleishman/bigstream) for robust and fully automated non-rigid registration of multi-round FISH data. For 3D segmentation, [Starfinity](https://github.com/mpicbg-csbd/stardist/tree/refinement) is a deep learning-based automatic 3D segmentation software. Starfinity is an extension of [Stardist](https://github.com/mpicbg-csbd/stardist), an earlier cell detection approach (Schmidt et al., 2018; Weigert et al., 2020) and is based on the dense prediction of cell border distances and their subsequent aggregation into pixel affinities. A starfinity [model](https://doi.org/10.25378/janelia.13624268) was trained to predict cell body shapes from DAPI-stained RNA images and is provided for testing. <br/>
@@ -58,15 +58,15 @@ For distributed spot detection, we used [RS-FISH](https://github.com/PreibischLa
 Assign spots, cell morphological measurements, dense spot analysis, FISH signal intensity measurements, lipofuscin subtraction are included in the EASIFISH Pipeline.
 
 ### Spot assignment #
+![](/Diagrams/3DseqFISH_diagram_v1_WARPMASK.png)
 To extract the point clouds for later 3D registrataion, we use the inverse tranformation exported from the above bigstream registration to warp the cell mask of the fixed rounds. Then, we adapt filter to remove the noise on the cell edges of the moving masks. After we adjust the image size of moving masks, we assign the spots for cell masks of the fixed and moving rounds. The spots will be assigned to these new cell masks.
-![](/Diagrams/Spot_detection.png)
 
 ### Classic Point cloud registration #
+![](/Diagrams/3DseqFISH_diagram_v1_DAPI.png)
 To accurately register the point clouds of multiple rounds, we apply classic linear registration methods for registering the FISH spots.For registering the sequentially 3-channel acquired FISH images, we first correct the chromatic abberation, registered the DAPI channel, apply the DAPI transformation to each FISH channel, and finally do the point cloud registration for all FISH channels of all rounds. <br/>
 Random sample consensus (RANSAC) is a powerful tool for coarsely registered the spots, and ICP then provides a solution for fine registration. Point cloud registration method first performs fast global affine transformation using a feature-based RANSAC algorithm. ICP then derives the globally optimal transformation for each cell that minimizes the sum of square distances to competing optimal affine matrix. <br/>
 Point cloud registration can be executed as part of the 3D-SeqFISH pipeline. It also can be installed and used seperately. <br/>
 ROI_ransac_napari_fixmovROI.ipynb now is the only python script for processing the 3d registration of FISH point clouds.
-![](/Diagrams/3DseqFISH_diagram_v1_DAPI.png)
 
 ### Deep-learning based Point cloud registration #
 For more accurately register the point clouds of multiple rounds, we also apply deep-learning based [registeration method](https://github.com/vinits5/learning3d#use-of-registration-networks). [RPMnet](https://github.com/yewzijian/RPMNet) and [PCRnet](https://github.com/vinits5/pcrnet) appeal to be the ideal options for a better registration.

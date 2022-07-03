@@ -25,12 +25,12 @@ This 3D-SeqFISH analysis toolbox is a integrated SeqFISH analysis method for 3D 
 
 ## Installation #
 
-`3D-SeqFISH` are inspired by SeqFISH and Point cloud registration and seqFISH decoding method, and it can be installed with `pip`:
+`3D-SeqFISH` are inspired by SeqFISH, Point cloud registration and seqFISH decoding method, and it can be installed with `pip`:
 ```
    pip install 3D-SeqFISH
 ```
 
-Preprocessing for point cloud registration is largely based on EASIFISH, MULTIFISH, bigstream, napari, and stardist, etc. <br/> 
+Preprocessing for 3D-SeqFISH analysis is largely based on EASIFISH, MULTIFISH, bigstream, napari, and stardist, etc. <br/> 
 
 `bigstream`  can be installed with  `pip`:
 ```
@@ -48,20 +48,18 @@ Preprocessing for point cloud registration is largely based on EASIFISH, MULTIFI
 ## Modules #
 
 ### Preprocessing with EASIFISH Pipeline #
+![](/Diagrams/Pipeline.gif)
 See [here](https://github.com/multiFISH/EASI-FISH) for active EASI-FISH pipeline updates, and [here](https://github.com/JaneliaSciComp/multifish) for active MULTIFISH pipeline updates. <br/>
-For imaging large volumes, multiple sub-volumes (tiles) are sequentially acquired, followed by computational stitching into a single large image([Gao et al., 2019](https://science.sciencemag.org/content/363/6424/eaau8302.long)).The stitching module can be executed with the EASI-FISH pipeline (see above). <br/> 
-For coarsely registering images, we used [BigStream](https://github.com/GFleishman/bigstream) for robust and fully automated non-rigid registration of multi-round FISH data. <br/> 
-For 3D segmentation, [Starfinity](https://github.com/mpicbg-csbd/stardist/tree/refinement) is a deep learning-based automatic 3D segmentation software. Starfinity is an extension of [Stardist](https://github.com/mpicbg-csbd/stardist), an earlier cell detection approach (Schmidt et al., 2018; Weigert et al., 2020) and is based on the dense prediction of cell border distances and their subsequent aggregation into pixel affinities. A starfinity [model](https://doi.org/10.25378/janelia.13624268) was trained to predict cell body shapes from DAPI-stained RNA images and is provided for testing. Starfinity can be executed as part of the EASI-FISH pipeline. <br/>
+For imaging large volumes, multiple sub-volumes (tiles) are sequentially acquired, followed by computational stitching into a single large image ([Gao et al., 2019](https://science.sciencemag.org/content/363/6424/eaau8302.long)).
+The stitching module can be executed with the EASI-FISH pipeline (see above). For coarsely registering images, we used [BigStream](https://github.com/GFleishman/bigstream) for robust and fully automated non-rigid registration of multi-round FISH data. For 3D segmentation, [Starfinity](https://github.com/mpicbg-csbd/stardist/tree/refinement) is a deep learning-based automatic 3D segmentation software. Starfinity is an extension of [Stardist](https://github.com/mpicbg-csbd/stardist), an earlier cell detection approach (Schmidt et al., 2018; Weigert et al., 2020) and is based on the dense prediction of cell border distances and their subsequent aggregation into pixel affinities. A starfinity [model](https://doi.org/10.25378/janelia.13624268) was trained to predict cell body shapes from DAPI-stained RNA images and is provided for testing. Starfinity can be executed as part of the EASI-FISH pipeline. <br/>
 For distributed spot detection, we used [RS-FISH](https://github.com/PreibischLab/RS-FISH) or hAirlocalize [Airlocalize](https://github.com/timotheelionnet/AIRLOCALIZE)([Lionnet et al., 2011](https://www.nature.com/articles/nmeth.1551)) to allow rapid spot detection on full-resolution large image datasets. hAirlocalize can be executed independently or as part of the EASI-FISH pipeline (see above). For independent execution, we recommend working with the n5 filesystem due to large file size.
-![](/Diagrams/Pipeline.gif) 
 
 ### Spot assignment #
-For extracting the point clouds to do the 3D registrataion, we used the inverse tranformation exported from the above bigstream registration to warp the cell mask of the fixed rounds. Then, we we assign the spots for cell masks of the fixed and moving rounds. The spots will be assigned to these new cell masks.
+To extract the point clouds for later 3D registrataion, we used the inverse tranformation exported from the above bigstream registration to warp the cell mask of the fixed rounds. Then, we we assign the spots for cell masks of the fixed and moving rounds. The spots will be assigned to these new cell masks.
 
 ### Classic Point cloud registration #
-For accurately register the point clouds of multiple rounds, we apply classic linear registration methods methods for register the FISH spots.  <br/>
-For registering the sequentially 3-channel acquired FISH images, we first correct the chromatic abberation, registered the DAPI channel, apply the DAPI transformation to each FISH channel, and finally do the point cloud registration for all FISH channels of all rounds. <br/>
-Random sample consensus (RANSAC) is a powerful tool for coarsely registered the spots, ICP then will be used for a fine registration. Point cloud registration method first performs fast global affine transformation using a feature-based RANSAC algorithm. ICP then derives the globally optimal transformation for each cell that minimizes the sum of square distances to competing optimal affine matrix. <br/>
+To accurately register the point clouds of multiple rounds, we apply classic linear registration methods for registering the FISH spots.For registering the sequentially 3-channel acquired FISH images, we first correct the chromatic abberation, registered the DAPI channel, apply the DAPI transformation to each FISH channel, and finally do the point cloud registration for all FISH channels of all rounds. <br/>
+Random sample consensus (RANSAC) is a powerful tool for coarsely registered the spots, and ICP then provides a solution for fine registration. Point cloud registration method first performs fast global affine transformation using a feature-based RANSAC algorithm. ICP then derives the globally optimal transformation for each cell that minimizes the sum of square distances to competing optimal affine matrix. <br/>
 Point cloud registration can be executed as part of the 3D-SeqFISH pipeline. It also can be installed and used seperately. 
 ![](/Diagrams/3DseqFISH_diagram_v1_DAPI.png)
 
@@ -69,12 +67,12 @@ Point cloud registration can be executed as part of the 3D-SeqFISH pipeline. It 
 For more accurately register the point clouds of multiple rounds, we also apply deep-learning based registeration method here ([RPMnet](https://github.com/yewzijian/RPMNet) and [PCRnet](https://github.com/vinits5/pcrnet) appeal to be the ideal options for a better registration).
 
 ### Barcoding and decoding analysis #
-We adapted the idea of [seqFISH](https://github.com/CaiGroup/seqFISH-PLUS) and [HCR 3.0](https://www.molecularinstruments.com/hcr-rnafish-products) for our 3D-seqFISH experiments. For barcoding the genes, we used 3 different channel/colors will be used and 4 rounds will be run. 1-3 extra rounds will be conducted for error corrections. <br/>
+We borrow the idea of [seqFISH](https://github.com/CaiGroup/seqFISH-PLUS) and [HCR 3.0](https://www.molecularinstruments.com/hcr-rnafish-products) for our 3D-seqFISH experiments. For barcoding the genes, we used 3 different channel/colors will be used and 4 rounds will be run. 1-3 extra rounds will be conducted for error corrections. <br/>
 For encoding the genes, we modified SeqFISH design by using a best threshold radius for determine the colocalized spots of each rounds (see [Youden's J Statistic](https://www.kaggle.com/code/willstone98/youden-s-j-statistic-for-threshold-determination/notebook)). <br/>
 For increase the detection efficency, the nearest 3 spots for a specific bit will be used for find the most correlated code for a specific gene. <br/>
 
 ## Pipeline #
-We build a self-contained, highly flexible, and platform agnostic computational [pipeline](https://github.com/JaneliaSciComp/multifish), which supports turnkey 3D-SeqFISH analysis on local machines and the High performance compute cluster (such as Slurm or LSF). The pipeline is freely available, open source, and modular. It can rapidly process large datasets greater than 10 TB in size with minimal manual intervention. The pipeline can be used to analyze EASI-FISH dataset end-to-end. It takes `czi` image files acquired from Zeiss Z.1 lightsheet microscope as input and outputs 1) processed image data at different scales and 2) transcript counts that can be readily used for cell type identification. The pipeline also provides options to run individual analysis modules, such as image stitching or registration. 
+We build a self-contained, highly flexible, and platform agnostic computational [pipeline](https://github.com/JaneliaSciComp/multifish), which supports a turnkey 3D-SeqFISH analysis on local machines and the High performance compute cluster (such as Slurm or LSF). The pipeline is freely available, open source, and modular. It can rapidly process large datasets greater than 10 TB in size with minimal manual intervention. The pipeline can be used to analyze EASI-FISH dataset end-to-end. It takes `czi` image files acquired from Zeiss Z7 lightsheet microscope as input and outputs 1) processed image data at different scales and 2) transcript counts that can be readily used for cell type identification. The pipeline also provides options to run individual analysis modules, such as image stitching or registration. 
 
 ### Example data #
 This toolbox handles large-scale, multi-round, high-resolution image data acquired using EASI-FISH (Expansion-Assisted Iterative Fluorescence *In Situ* Hybridization). It takes advantage of the [n5](https://github.com/saalfeldlab/n5) filesystem to allow for rapid and parallel data reading and writing.  <br/>

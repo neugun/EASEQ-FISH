@@ -2,6 +2,7 @@
 
 ## Table of Contents #
    * [Description](#description)
+      * [News (and plans)](#news-(and-plans))
    * [Installation](#Installation)
    * [Modules](#modules)
       * [Preprocessing with EASIFISH Pipeline](#preprocessing-with-EASIFISH-Pipeline)
@@ -19,10 +20,24 @@
       * [Reference](#reference)
       * [Contributors](#contributors)
 
+
 ## Description #
 
 The 3D-SeqFISH analysis toolbox integrate EASIFISH (Expansion-Assisted Iterative Fluorescence *In Situ* Hybridization) pipeline and 3D registration method for analyzing image-based 3D spatial transcriptomic data. We aim to provide the general solution for 3D spatial transcriptome, including automated image stitching, 3D cell segmentation, distributed spot detection, and distributed and highly accurate multi-round 3D FISH spot registration (nm-level accuracy), and decoding analysis.  <br/><br/>
 ![](/Diagrams/3DseqFISH_diagram_v1.png)
+
+### News (and plans)#
+- Released the 3D-SeqFISH github page on 7/2/22
+- Test PFH and FPFH on 7/3/22
+- Grouped registration evaluation on 7/3/22
+- Add 3D-SeqFISH core scripts on 7/3/22
+- Test RANSAC-ICP on 7/4/22
+- Generate shuffle point clouds on 7/6/22
+- Determine the threshold for radius on 7/9/22
+- Add 3D-SeqFISH decoding results for a single tile image on 7/11/22
+- Test deep learning methods for registration by 8/1/22
+- Write decoding analysis by 10/1/22
+- Add 3D-SeqFISH bash scripts by 9/1/22
 
 ## Installation #
 

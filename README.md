@@ -21,7 +21,7 @@
 
 ## Description #
 
-The 3D-SeqFISH analysis toolbox integrate EASIFISH (Expansion-Assisted Iterative Fluorescence *In Situ* Hybridization) pipeline and 3D registration method for analyzing image-based 3D spatial transcriptomic data. We aim to provide the general solution for 3D spatial transcriptome, including automated image stitching, 3D cell segmentation, distributed spot detection, and distributed and highly accurate multi-round 3D FISH spot registration (nm-level accuracy), and decoding analysis.  <br/>
+The 3D-SeqFISH analysis toolbox integrate EASIFISH (Expansion-Assisted Iterative Fluorescence *In Situ* Hybridization) pipeline and 3D registration method for analyzing image-based 3D spatial transcriptomic data. We aim to provide the general solution for 3D spatial transcriptome, including automated image stitching, 3D cell segmentation, distributed spot detection, and distributed and highly accurate multi-round 3D FISH spot registration (nm-level accuracy), and decoding analysis.  <br/><br/>
 ![](/Diagrams/3DseqFISH_diagram_v1.png)
 
 ## Installation #
@@ -49,6 +49,7 @@ Preprocessing for 3D-SeqFISH is based on EASIFISH (Expansion-Assisted Iterative 
 ## Modules #
 
 ### Preprocessing with EASIFISH Pipeline #
+
 ![](/Diagrams/Pipeline.gif)
 See [updates](https://github.com/multiFISH/EASI-FISH) for EASI-FISH pipeline, and [MULTIFISH pipeline](https://github.com/JaneliaSciComp/multifish). <br/>
 For imaging large volumes, multiple sub-volumes (tiles) are sequentially acquired with 3X Expansion microscopy, followed by [computational stitching](https://science.sciencemag.org/content/363/6424/eaau8302.long) into a single large image. For independent execution, we recommend working with the n5 filesystem due to large file size. <br/>
@@ -66,7 +67,7 @@ Point cloud registration can be executed as part of the 3D-SeqFISH pipeline. It 
 ![](/Diagrams/3DseqFISH_diagram_v1_DAPI.png)
 
 ### Deep-learning based Point cloud registration #
-For more accurately register the point clouds of multiple rounds, we also apply deep-learning based [registeration method](https://github.com/vinits5/learning3d#use-of-registration-networks).[RPMnet](https://github.com/yewzijian/RPMNet) and [PCRnet](https://github.com/vinits5/pcrnet) appeal to be the ideal options for a better registration.
+For more accurately register the point clouds of multiple rounds, we also apply deep-learning based [registeration method](https://github.com/vinits5/learning3d#use-of-registration-networks). [RPMnet](https://github.com/yewzijian/RPMNet) and [PCRnet](https://github.com/vinits5/pcrnet) appeal to be the ideal options for a better registration.
 
 ### Barcoding and decoding analysis #
 We borrow the idea of [seqFISH](https://github.com/CaiGroup/seqFISH-PLUS) and [HCR 3.0](https://www.molecularinstruments.com/hcr-rnafish-products) for our 3D-seqFISH experiments. For barcoding the genes, 3 different channels will be used and 4-5 rounds of FISH will be run. 1-3 extra rounds will be conducted for error corrections. <br/>
@@ -74,11 +75,10 @@ For decoding the genes, we modify the SeqFISH design by using a best threshold r
 For increase the detection efficency, the nearest 3 spots for a specific barcode bit will be used for searching the most correlated code of a specific gene. <br/>
 
 ## Pipeline #
-We build a self-contained, highly flexible, and platform agnostic computational [pipeline](https://github.com/JaneliaSciComp/multifish), which supports a turnkey 3D-SeqFISH analysis on local machines and the High performance compute cluster (such as Slurm or LSF). The pipeline is freely available, open source, and modular. It can rapidly process large datasets greater than 10 TB in size with minimal manual intervention. The pipeline can be used to analyze EASI-FISH dataset end-to-end. It takes `czi` image files acquired from Zeiss Z7 lightsheet microscope as input and outputs 1) processed image data at different scales and 2) transcript counts that can be readily used for cell type identification. The pipeline also provides options to run individual analysis modules, such as point cloud registration and gene decoding. 
+We build a self-contained, highly flexible, and platform agnostic computational [pipeline](https://github.com/JaneliaSciComp/multifish), which supports a turnkey 3D-SeqFISH analysis on local machines and the High performance compute cluster (such as Slurm or LSF). It can rapidly process large datasets greater than 10 TB in size with minimal manual intervention. The pipeline can be used to analyze EASI-FISH dataset end-to-end. It takes `czi` image files acquired from Zeiss Z7 lightsheet microscope as input and outputs 1) processed image data at different scales and 2) transcript counts that can be readily used for cell type identification. The pipeline also provides options to run individual analysis modules, such as point cloud registration and gene decoding. 
 
 ### Example data #
-This toolbox handles large-scale, multi-round, high-resolution image data acquired using EASI-FISH. It takes advantage of the [n5](https://github.com/saalfeldlab/n5) filesystem to allow for rapid and parallel data reading and writing.  <br/>
-[Example images](https://doi.org/10.25378/janelia.c.5276708.v1) are provided for testing EASI-FISH pipeline. <br/>
+This toolbox handles large-scale, multi-round, high-resolution image data acquired using EASI-FISH. It takes advantage of the [n5](https://github.com/saalfeldlab/n5) filesystem to allow for rapid and parallel data reading and writing. [Example images](https://doi.org/10.25378/janelia.c.5276708.v1) are provided for testing EASI-FISH pipeline. <br/>
 We provide the related images and point clouds of a example cell (5#) for testing the 3D registration. Stay tuned to the description later. <br/>
 
 ### Jupyter notebook #

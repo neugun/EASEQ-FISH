@@ -41,7 +41,7 @@ The 3D-SeqFISH analysis toolbox integrates EASIFISH (Expansion-Assisted Iterativ
 
 ## Installation #
 
-`3D-SeqFISH` analysis are inspired by point cloud registration and seqFISH decoding methods. jupyter notebook, matplotlib,numpy,math,cv2,skimage,scipy,pandas,seaborn,zarr,z5py,qt5 packages are installed inside a anaconda envioronment (python 3.8.12), and it can be installed with `pip`:
+`3D-SeqFISH` analysis are inspired by point cloud registration and seqFISH decoding methods. Python >= 3.6 required, jupyter notebook, matplotlib,numpy,math,cv2,skimage,scipy,pandas,seaborn,zarr,z5py,qt5 packages are installed inside a anaconda envioronment (python 3.8.12), and it can be installed with `pip`:
 ```
    pip install 3D-SeqFISH
 ```

@@ -7,8 +7,8 @@
    * [Modules](#modules)
       * [Preprocessing with EASIFISH Pipeline](#preprocessing-with-EASIFISH-Pipeline)
       * [Spot assignment](#spot-assignment)
-      * [Classic Point cloud registration](#classic-point-cloud-registration)
-      * [Deep learning](#deep-learning)
+      * [Classic point cloud registration](#classic-point-cloud-registration)
+      * [Deep-learning based point cloud registration](#deep-learning-based-point-cloud-registration)
       * [Barcoding and decoding analysis](#barcoding-and-decoding-analysis)
    * [Pipeline](#pipeline)
       * [Example data](#example-data)
@@ -23,25 +23,25 @@
 
 ## Description #
 
-The 3D-SeqFISH analysis toolbox integrate EASIFISH (Expansion-Assisted Iterative Fluorescence *In Situ* Hybridization) pipeline and 3D registration method for analyzing image-based 3D spatial transcriptomic data. We aim to provide the general solution for 3D spatial transcriptome, including automated image stitching, 3D cell segmentation, distributed spot detection, highly accurate multi-round 3D FISH spot registration (nm-level accuracy), and efficiently decoding hundreds of genes from sample images.  <br/><br/>
+The 3D-SeqFISH analysis toolbox integrates EASIFISH (Expansion-Assisted Iterative Fluorescence *In Situ* Hybridization) pipeline and 3D registration method for analyzing image-based 3D spatial transcriptomic data. We aim to provide the general solution for 3D spatial transcriptome, including automated image stitching, 3D cell segmentation, distributed spot detection, highly accurate multi-round 3D FISH spot registration (nm-level accuracy), and efficiently decoding hundreds of genes for thick tissues.  <br/><br/>
 ![](/Diagrams/3DseqFISH_diagram_v1.png)
 
 ### News and plans #
 - Released the 3D-SeqFISH github page on 7/2/22
-- Add 3D-SeqFISH individual scripts on 7/3/22
-- Test PFH and FPFH on 7/3/22
-- Grouped registration scripts and evaluation on 7/3/22
-- Test RANSAC-ICP on 7/4/22
-- Generate shuffle point clouds on 7/6/22
+- Add 3D-SeqFISH individual scripts on 7/4/22
+- Test PFH and FPFH on 7/4/22
+- Grouped registration scripts and evaluation on 7/4/22
+- Test RANSAC-ICP on 7/5/22
+- Generate shuffled point clouds on 7/7/22
 - Determine the threshold for radius on 7/9/22
 - Add 3D-SeqFISH decoding results for a single tile image on 7/11/22
 - Test deep learning methods for registration by 8/1/22
-- Write decoding analysis by 10/1/22
-- Add 3D-SeqFISH bash scripts by 9/1/22
+- Add decoding analysis by 9/1/22
+- Test 3D-SeqFISH bash scripts by 9/1/22
 
 ## Installation #
 
-`3D-SeqFISH` analysis are inspired by Point cloud registration and seqFISH decoding methods, and it can be installed with `pip`:
+`3D-SeqFISH` analysis are inspired by point cloud registration and seqFISH decoding methods. jupyter notebook, matplotlib,numpy,math,cv2,skimage,scipy,pandas,seaborn,zarr,z5py,qt5 packages are installed inside a anaconda envioronment (python 3.8.12), and it can be installed with `pip`:
 ```
    pip install 3D-SeqFISH
 ```
@@ -68,7 +68,7 @@ Preprocessing for 3D-SeqFISH is based on EASIFISH (Expansion-Assisted Iterative 
 ![](/Diagrams/3DseqFISH_diagram_v1_EASIFISH.png)
 - See updates for [EASI-FISH pipeline](https://github.com/multiFISH/EASI-FISH), and [MULTIFISH pipeline](https://github.com/JaneliaSciComp/multifish). <br/>
 - For imaging large volumes, multiple sub-volumes (tiles) are sequentially acquired with 3X Expansion microscopy, followed by [computational stitching](https://science.sciencemag.org/content/363/6424/eaau8302.long) into a single large image. For independent execution, we recommend working with the n5 filesystem due to large file size. <br/>
-- For coarsely registering images, we used [BigStream](https://github.com/GFleishman/bigstream) for robust and fully automated non-rigid registration of multi-round FISH data. For 3D segmentation, [Starfinity](https://github.com/mpicbg-csbd/stardist/tree/refinement) is a deep learning-based automatic 3D segmentation software. Starfinity is an extension of [Stardist](https://github.com/mpicbg-csbd/stardist). <br/>
+- For coarsely registering images, we used [BigStream](https://github.com/GFleishman/bigstream) for non-rigid registration of multi-round FISH data. For 3D segmentation, [Starfinity](https://github.com/mpicbg-csbd/stardist/tree/refinement) is a deep learning-based automatic 3D segmentation software. Starfinity is an extension of [Stardist](https://github.com/mpicbg-csbd/stardist). <br/>
 - For distributed spot detection, we used [RS-FISH](https://github.com/PreibischLab/RS-FISH) or [hAirlocalize](https://github.com/timotheelionnet/AIRLOCALIZE) to allow rapid spot detection on full-resolution large image datasets. <br/>
 - Assign spots, cell morphological measurements, dense spot analysis, FISH signal intensity measurements, lipofuscin subtraction are included in the EASIFISH Pipeline.
 
@@ -76,23 +76,23 @@ Preprocessing for 3D-SeqFISH is based on EASIFISH (Expansion-Assisted Iterative 
 ![](/Diagrams/3DseqFISH_diagram_v1_WARPMASK.png)
 - To extract the point clouds for later 3D registrataion, we use the inverse tranformation exported from the above bigstream registration to warp the cell mask of the fixed rounds. Then, we adapt filter to remove the noise on the cell edges of the moving masks. After we adjust the image size of moving masks, we assign the spots for cell masks of the fixed and moving rounds.
 
-### Classic Point cloud registration #
+### Classic point cloud registration #
 ![](/Diagrams/3DseqFISH_diagram_v1_DAPI.png)
-- To accurately register the point clouds of multiple rounds, we apply classic linear registration methods for registering the FISH spots. For registering the sequentially 3-channel acquired FISH images, we first correct the chromatic abberation, registered the DAPI channel, apply the DAPI transformation to each FISH channel, and finally do the point cloud registration for all FISH channels of all rounds. <br/>
-- Random sample consensus (RANSAC) is a powerful tool for coarsely registered the spots, and ICP then provides a solution for fine registration. Point cloud registration method first performs fast global affine transformation using a feature-based RANSAC algorithm. ICP then derives the globally optimal transformation for each cell that minimizes the sum of square distances to competing optimal affine matrix. <br/>
+- To accurately register the point clouds of multiple rounds, we apply classic linear registration methods for registering the FISH spots. For registering the sequentially 3-channel acquired FISH images, we first correct the chromatic abberation, registered the DAPI channel, apply the DAPI transformation to each FISH channel or FISH spots, and then do the point cloud registration for all FISH channels of all rounds. <br/>
+- Random sample consensus (RANSAC) is a powerful tool with fast global affine transformation using a feature-based RANSAC algorithm to coarsely registered the spots. Iterative closest point (ICP) derives the globally optimal transformation for each cell that minimizes the sum of square distances to competing optimal affine matrix, which is provides a solution for fine registration. <br/>
 - Point cloud registration can be executed as part of the 3D-SeqFISH pipeline. It also can be installed and used seperately. <br/>
 - ROI_ransac_napari_fixmovROI.ipynb now is the only python script for processing the 3d registration of FISH point clouds.
 
-### Deep-learning based Point cloud registration #
-- For more accurately register the point clouds of multiple rounds, we also apply deep-learning based [registeration method](https://github.com/vinits5/learning3d#use-of-registration-networks). [RPMnet](https://github.com/yewzijian/RPMNet) and [PCRnet](https://github.com/vinits5/pcrnet) appeal to be the ideal options for a better registration.
+### Deep-learning based point cloud registration #
+- For more accurately register the point clouds of multiple rounds, we also apply [deep-learning based registeration method](https://github.com/vinits5/learning3d#use-of-registration-networks). [RPMnet](https://github.com/yewzijian/RPMNet) and [PCRnet](https://github.com/vinits5/pcrnet) appeal to be the ideal options for a better registration.
 
 ### Barcoding and decoding analysis #
-- We benefit from the idea of [seqFISH](https://github.com/CaiGroup/seqFISH-PLUS) and [HCR 3.0](https://www.molecularinstruments.com/hcr-rnafish-products) for our 3D-seqFISH experiments. For barcoding the genes, 3 different channels of lightsheet microscope will be used and 4-5 rounds of FISH will be run for encoding 81-243 genes. 2-6 extra rounds will be conducted for error corrections, examine the decoding efficiency and probe the dense expressed genes. <br/>
+- We benefit from the idea of [seqFISH](https://github.com/CaiGroup/seqFISH-PLUS) and [HCR 3.0](https://www.molecularinstruments.com/hcr-rnafish-products) for our 3D-seqFISH barcoding and decoding. For barcoding the genes, 3 different channels of FISH images acquired with lightsheet microscope will be used and 4-5 rounds of EASIFISH will be run for encoding 81-243 genes. 2-6 extra rounds will be conducted for error correction, examination of the decoding efficiency and dense expressed genes with non-combinatorial FISH. <br/>
 - For decoding the genes, we modify the SeqFISH design by using a best threshold radius for determine the colocalized spots of each rounds (see [Youden's J Statistic](https://www.kaggle.com/code/willstone98/youden-s-j-statistic-for-threshold-determination/notebook)). <br/>
 - For increase the detection efficency, the nearest 3 spots for a specific barcode bit will be used for searching the most correlated code of a specific gene. <br/>
 
 ## Pipeline #
-- We build a self-contained, highly flexible, and platform agnostic computational [pipeline](https://github.com/JaneliaSciComp/multifish), which supports a turnkey 3D-SeqFISH analysis on local machines and the High performance compute cluster (such as Slurm or LSF). It can rapidly process large datasets greater than 10 TB in size with minimal manual intervention. The pipeline can be used to analyze EASI-FISH dataset end-to-end. It takes `czi` image files acquired from Zeiss Z7 lightsheet microscope as input and outputs 1) processed image data at different scales and 2) transcript counts that can be readily used for cell type identification. The pipeline also provides options to run individual analysis modules, such as point cloud registration and gene decoding. 
+- We build a self-contained, highly flexible, and platform agnostic computational [pipeline](https://github.com/JaneliaSciComp/multifish), which supports a turnkey 3D-SeqFISH analysis on local machines and the High performance compute cluster (such as Slurm or LSF). It can rapidly process large datasets greater than 10 TB in size with minimal manual intervention. The pipeline also provides options to run individual analysis modules, such as point cloud registration and gene decoding. 
 
 ### Example data #
 - This toolbox handles large-scale, multi-round, high-resolution image data acquired using EASI-FISH. It takes advantage of the [n5](https://github.com/saalfeldlab/n5) filesystem to allow for rapid and parallel data reading and writing. [Example images](https://doi.org/10.25378/janelia.c.5276708.v1) are provided for testing EASI-FISH pipeline. <br/>
@@ -121,4 +121,4 @@ https://www.sciencedirect.com/science/article/pii/S0092867421013398
 
 ### Contributors#
 Zhenggang Zhu <br/>
-Charlotte Wang <br/>
+Shiqi Wang (Charlotte) <br/>

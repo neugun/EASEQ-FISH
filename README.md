@@ -89,13 +89,13 @@ Preprocessing for 3D-SeqFISH is based on EASIFISH (Expansion-Assisted Iterative 
 - 1) image based RANSAC + ICP: apply bigstream registration methods for registering the FISH spots. we first correct the chromatic abberation, registered the DAPI channel, apply the DAPI transformation to each FISH channel or FISH spots, and then do the point cloud registration for all FISH channels of all rounds. <br/>
 ![](/Diagrams/3DseqFISH_diagram_v1_DAPI.png)
 - 2) FPFH based RANSAC + ICP <br/>
-- FPFH is not the best way to extract features, now the results are worse the first method. <br/>
+-    FPFH is not the best way to extract features, now the results is worse than the above method(not registered or distance > 1 um). <br/>
 - 3) PFH based RANSAC + RANSAC-ICP (to be tested) <br/>
-- PFH will include more features, and RANSAC-ICP will help to remove outliers during the iterative fine registration. <br/>
+-    PFH will include more features than FPFH, and RANSAC-ICP will help to remove outliers during the iterative fine registration. <br/>
 - Point cloud registration can be executed as part of the 3D-SeqFISH pipeline. It also can be installed and used seperately. <br/>
 
 ### Deep-learning based point cloud registration #
-- Image based RANSAC + ICP or PFH based RANSAC + RANSAC-ICP is not use enough features and final results are still not ideal.
+- Image based RANSAC + ICP and PFH based RANSAC + RANSAC-ICP are not using enough features and these final results are still not ideal in accuracy and efficiency.
 - For more accurately register the point clouds of multiple rounds, we also apply [deep-learning based registeration method](https://github.com/vinits5/learning3d#use-of-registration-networks). [RPMnet](https://github.com/yewzijian/RPMNet) and [PCRnet](https://github.com/vinits5/pcrnet) appeal to be the ideal options for a better registration.
 
 ### Barcoding and decoding analysis #

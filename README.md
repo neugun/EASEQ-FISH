@@ -30,7 +30,7 @@ The 3D-SeqFISH analysis toolbox integrates EASIFISH (Expansion-Assisted Iterativ
 - Released the 3D-SeqFISH github page on 7/2/22
 - Add 3D-SeqFISH individual scripts on 7/4/22
 - Test PFH and FPFH on 7/4/22
-- Grouped registration scripts and evaluation on 7/4/22
+- Grouping registration scripts and evaluation on 7/4/22
 - Test RANSAC-ICP on 7/5/22
 - Generate shuffled point clouds on 7/7/22
 - Determine the threshold for radius on 7/9/22
@@ -44,6 +44,13 @@ The 3D-SeqFISH analysis toolbox integrates EASIFISH (Expansion-Assisted Iterativ
 `3D-SeqFISH` analysis are inspired by point cloud registration and seqFISH decoding methods. Python >= 3.6 required, jupyter notebook, matplotlib,numpy,math,cv2,skimage,scipy,pandas,seaborn,zarr,z5py,qt5 packages are installed inside a anaconda envioronment (python 3.8.12), and it can be installed with `pip`:
 ```
    pip install 3D-SeqFISH
+```
+   pip install pclpy==0.11.0 -i https://pypi.tuna.tsinghua.edu.cn/simple  Python == 3.6 required
+```
+   pip install python-pcl
+```
+```
+   pip install open3
 ```
 
 Preprocessing for 3D-SeqFISH is based on EASIFISH (Expansion-Assisted Iterative Fluorescence *In Situ* Hybridization), MULTIFISH, bigstream, napari, and stardist, etc. <br/> 

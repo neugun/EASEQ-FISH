@@ -7,7 +7,7 @@
    * [Modules](#modules)
       * [Preprocessing with EASIFISH Pipeline](#preprocessing-with-EASIFISH-Pipeline)
       * [Spot assignment](#spot-assignment)
-      * [Classic point cloud registration](#classic-point-cloud-registration)
+      * [Traditional point cloud registration](#traditional-point-cloud-registration)
       * [Deep-learning based point cloud registration](#deep-learning-based-point-cloud-registration)
       * [Barcoding and decoding analysis](#barcoding-and-decoding-analysis)
    * [Pipeline](#pipeline)
@@ -19,7 +19,6 @@
       * [Post processing](#post-processing)  
       * [Reference](#reference)
       * [Contributors](#contributors)
-
 
 ## Description #
 
@@ -50,7 +49,7 @@ The 3D-SeqFISH analysis toolbox integrates EASIFISH (Expansion-Assisted Iterativ
    pip install python-pcl
 ```
 ```
-   pip install open3
+   pip install open3D
 ```
 
 Preprocessing for 3D-SeqFISH is based on EASIFISH (Expansion-Assisted Iterative Fluorescence *In Situ* Hybridization), MULTIFISH, bigstream, napari, and stardist, etc. <br/> 
@@ -83,14 +82,20 @@ Preprocessing for 3D-SeqFISH is based on EASIFISH (Expansion-Assisted Iterative 
 ![](/Diagrams/3DseqFISH_diagram_v1_WARPMASK.png)
 - To extract the point clouds for later 3D registrataion, we use the inverse tranformation exported from the above bigstream registration to warp the cell mask of the fixed rounds. Then, we adapt filter to remove the noise on the cell edges of the moving masks. After we adjust the image size of moving masks, we assign the spots for cell masks of the fixed and moving rounds.
 
-### Classic point cloud registration #
-![](/Diagrams/3DseqFISH_diagram_v1_DAPI.png)
-- To accurately register the point clouds of multiple rounds, we apply classic linear registration methods for registering the FISH spots. For registering the sequentially 3-channel acquired FISH images, we first correct the chromatic abberation, registered the DAPI channel, apply the DAPI transformation to each FISH channel or FISH spots, and then do the point cloud registration for all FISH channels of all rounds. <br/>
+### Traditional point cloud registration #
+- ROI_ransac_napari_fixmovROI.ipynb now is the only python script for processing the 3d registration of FISH point clouds.<br/>
 - Random sample consensus (RANSAC) is a powerful tool with fast global affine transformation using a feature-based RANSAC algorithm to coarsely registered the spots. Iterative closest point (ICP) derives the globally optimal transformation for each cell that minimizes the sum of square distances to competing optimal affine matrix, which is provides a solution for fine registration. <br/>
+- To accurately register the point clouds of multiple rounds, we apply 3 traditional stragety to register the FISH spots, 1) image based RANSAC + ICP; 2) FPFH based RANSAC + ICP; 3) PFH based RANSAC + RANSAC-ICP (to be tested). <br/>
+- 1) image based RANSAC + ICP: apply bigstream registration methods for registering the FISH spots. we first correct the chromatic abberation, registered the DAPI channel, apply the DAPI transformation to each FISH channel or FISH spots, and then do the point cloud registration for all FISH channels of all rounds. <br/>
+![](/Diagrams/3DseqFISH_diagram_v1_DAPI.png)
+- 2) FPFH based RANSAC + ICP <br/>
+- FPFH is not the best way to extract features, now the results are worse the first method. <br/>
+- 3) PFH based RANSAC + RANSAC-ICP (to be tested) <br/>
+- PFH will include more features, and RANSAC-ICP will help to remove outliers during the iterative fine registration. <br/>
 - Point cloud registration can be executed as part of the 3D-SeqFISH pipeline. It also can be installed and used seperately. <br/>
-- ROI_ransac_napari_fixmovROI.ipynb now is the only python script for processing the 3d registration of FISH point clouds.
 
 ### Deep-learning based point cloud registration #
+- Image based RANSAC + ICP or PFH based RANSAC + RANSAC-ICP is not use enough features and final results are still not ideal.
 - For more accurately register the point clouds of multiple rounds, we also apply [deep-learning based registeration method](https://github.com/vinits5/learning3d#use-of-registration-networks). [RPMnet](https://github.com/yewzijian/RPMNet) and [PCRnet](https://github.com/vinits5/pcrnet) appeal to be the ideal options for a better registration.
 
 ### Barcoding and decoding analysis #

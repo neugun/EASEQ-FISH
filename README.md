@@ -84,23 +84,24 @@ Preprocessing for 3D-SeqFISH is based on EASIFISH (Expansion-Assisted Iterative 
 - To extract the point clouds for later 3D registrataion, we use the inverse tranformation exported from the above bigstream registration to warp the cell mask of the fixed rounds. Then, we adapt filter to remove the noise on the cell edges of the moving masks. After we adjust the image size of moving masks, we assign the spots for cell masks of the fixed and moving rounds.
 
 ### Traditional point cloud registration #
-- ROI_ransac_napari_fixmovROI.ipynb(/3d_SeqFISH/ROI_ransac_napari_fixmovROI.ipynb) now is the only python script for processing the 3d registration of FISH point clouds.<br/>
+- Traditional point cloud registration methods are mostly used for registering the FISH images and RANSAC + ICP has been used as the SOTA.
+- ROI_ransac_napari_fixmovROI.ipynb (/3d_SeqFISH/) now is the only python script for processing the 3d registration of FISH point clouds.<br/>
 - Feature-based Random sample consensus (RANSAC) algorithm is a powerful tool to coarsely registered the spots for each cell by estimating the fast global affine transformation. Iterative closest point (ICP) derives the globally optimal transformation for each cell that minimizes the sum of square distances to competing optimal affine matrix, which is provides a solution for fine registration. <br/>
-- Correct the chromatic abberation or the misalignment of image tracks will always be the initial step. Image-assisted or point feature based point cloud registratio with RANSAC + ICP has been used for registering green and red channel spots. Spots here can be lipofuscins, dual color probes, and multicolor beads.
-- To accurately register the point clouds of multiple rounds, we have applied 3 strageties to register the FISH spots: 1) image-assisted point cloud registratio with RANSAC + ICP; 2) point cloud registratio with FPFH-RANSAC + ICP; 3) point cloud registratio with PFH-RANSAC + RANSAC-ICP (to be tested). <br/>
-1) Image-assisted point cloud registratio with RANSAC + ICP: we use ransac-affine methods (can be also found in the bigstream registration) for global registering the point clouds with DAPI/FISH image context. Specficially, we first use the correlation of the DAPI context for DAPI blobs to do the ransac-affine, and use ICP-affine to finely register the DAPI channel.Next, we apply the DAPI transformation to spots of each FISH channel and the track transformation to spots of green and magenta channel. Then, we correlated the FISH image context for FISH spots of each cell to perform later ransac-affine and do ICP-affine to register the point clouds for all FISH channels of all rounds. <br/>
-![](/Diagrams/3DseqFISH_diagram_v1_DAPI.png)
-2) Point cloud registratio with FPFH-RANSAC + ICP <br/>
-- The step of this method is similar to the above one, but not extract features from the image but only with the Fast point feature histogram. The detailed steps are: a) we use ransac-affine for global registering the point clouds with DAPI blobs, and do ICP-affine to finely register the DAPI channel. But this step can be omitted. b) we apply the DAPI transformation to spots of each FISH channel and the track transformation to spots of green and magenta channel. Then, we correlated the point feature for FISH spots of each cell to perform later ransac-affine and do ICP-affine to register the point clouds for all FISH channels of all rounds. <br/>
-- FPFH is not the best way to extract features, now the results is worse than the above method (not registered or the distance of corresponding spots > 1 um). <br/>
-3) point cloud registratio with PFH-RANSAC + RANSAC-ICP (to be tested) <br/>
-- PFH will include more features than FPFH, and RANSAC-ICP will help to remove outliers of each iterative step during the fine ICP registration. <br/>
-<br/>
+- Correct the chromatic abberation or the misalignment of image tracks will always be the initial step. Image-assisted or point feature based point cloud registratio with RANSAC + ICP has been used for registering green and red channel spots. Spots here can be lipofuscins, dual color probes, or multicolor beads.
 - Point cloud registration can be executed as part of the 3D-SeqFISH pipeline. It also can be installed and used seperately. <br/>
+- To accurately register the point clouds of multiple rounds and find the best way for it, we have applied 3 strageties to register the FISH spots: 1) image-assisted point cloud registratio with RANSAC + ICP; 2) point cloud registratio with FPFH-RANSAC + ICP; 3) point cloud registratio with PFH-RANSAC + RANSAC-ICP (to be tested). <br/>
+1) Image-assisted point cloud registratio with RANSAC + ICP: we use ransac-affine methods (can be also found in the bigstream registration) for global registering the point clouds by correlating the DAPI/FISH image context. Specficially, we first use the correlation of the DAPI context for DAPI blobs to do the ransac-affine, and use ICP-affine to finely register the DAPI channel. Next, we apply the DAPI transformation to spots of each FISH channel and the track transformation to spots of green and magenta channel. Then, we correlated the FISH image context for FISH spots of each cell to perform later ransac-affine and do ICP-affine to register the point clouds for all FISH channels of all rounds. <br/>
+![](/Diagrams/3DseqFISH_diagram_v1_DAPI.png)
+2) Point cloud registration with FPFH-RANSAC + ICP <br/>
+- The step of this method does not extract features from the image (no image will be generated and used here), but only use features from the point clouds (here is the fast point feature histogram, FPFH). The detailed steps are: a) we use ransac-affine for global registering the point clouds with DAPI blobs, and do ICP-affine to finely register the DAPI channel. But this step can be omitted. b) we apply the DAPI transformation to spots of each FISH channel and the track transformation to spots of green and magenta channels. Then, we correlated the point feature for FISH spots of each cell to perform local ransac-affine and do ICP-affine to register the point clouds for all FISH channels of all rounds. <br/>
+- FPFH is the fast way to extract features, but it not has comparable features as the images or other points feature extraction method (e.g., PFH or SHOT). Our results with this method shows point clouds of some cells have not been well-registered or the distance of corresponding spots > 1 um, indicating it is worse than the above method . <br/>
+3) Point cloud registration with PFH-RANSAC + RANSAC-ICP (to be tested) <br/>
+- PFH will include more features than FPFH, and RANSAC-ICP is a method that removing outliers of each iterative step during the fine ICP registration. <br/>
+<br/>
 
 ### Deep-learning based point cloud registration #
-- Image-assisted or points feature based RANSAC affine is not able to extract enough important features and these final results are still not ideal in accuracy and efficiency.
-- For more accurately register the point clouds of multiple rounds, we also apply [deep-learning based registeration method](https://github.com/vinits5/learning3d#use-of-registration-networks). [RPMnet](https://github.com/yewzijian/RPMNet) and [PCRnet](https://github.com/vinits5/pcrnet) appeal to be the ideal options for a better registration.
+- Image-assisted or points feature based RANSAC affine method is not excel at extracting rich and important features, and these showed results are still not ideal in accuracy and efficiency.
+- To more accurately register the point clouds of multiple rounds, we also apply [deep-learning based registeration method](https://github.com/vinits5/learning3d#use-of-registration-networks). [RPMnet](https://github.com/yewzijian/RPMNet) and [PCRnet](https://github.com/vinits5/pcrnet) appeal to be the ideal options for getting a better registration.
 
 ### Barcoding and decoding analysis #
 - We benefit from the idea of [seqFISH](https://github.com/CaiGroup/seqFISH-PLUS) and [HCR 3.0](https://www.molecularinstruments.com/hcr-rnafish-products) for our 3D-seqFISH barcoding and decoding. For barcoding the genes, 3 different channels of FISH images acquired with lightsheet microscope will be used and 4 rounds of EASIFISH will be run for encoding 81 genes. 3-6 extra rounds will be conducted for error correction, increasing the decoding efficiency and probing dense expressed genes with non-combinatorial FISH. <br/>
@@ -118,8 +119,8 @@ Preprocessing for 3D-SeqFISH is based on EASIFISH (Expansion-Assisted Iterative 
 - ROI_ransac_napari_fixmovROI.ipynb has each registation step and can do the visualization of registered point clouds and images.
 
 ### Bash command #
-- Pipeline was executed with Bash command. <br/>
-- We used the Slurm high-performance cluster for computing, see the description for the Slurm workload manager [Slurm workload manager](https://slurm.schedmd.com/documentation.html).
+- Pipeline is to be executed with Bash command. <br/>
+- We use the Slurm high-performance cluster for computing, see the description for the Slurm workload manager [Slurm workload manager](https://slurm.schedmd.com/documentation.html).
 
 ## Additional information #
 
@@ -127,7 +128,7 @@ Preprocessing for 3D-SeqFISH is based on EASIFISH (Expansion-Assisted Iterative 
 - Fiji-based [n5-viewer](https://github.com/saalfeldlab/n5-viewer) can be used for large image dataset visualization. For inspection of spot registration, we recommend the python-based multi-dimensional image viewer, [napari](https://napari.org/). Example [notebooks](https://github.com/multiFISH/EASI-FISH/tree/master/data_visualization) are provided. 
 
 ### Post processing #
-- Code used for [Post processing](https://github.com/multiFISH/EASI-FISH/tree/master/data_processing), such as assign spots, cell morphological measurements, dense spot analysis, FISH signal intensity measurements, lipofuscin subtraction are included in this repository. 
+- Code used for [Post processing](https://github.com/multiFISH/EASI-FISH/tree/master/data_processing), such as assigning spots, cell morphological measurements, dense spot analysis, FISH signal intensity measurements, lipofuscin subtraction are included in this repository. 
 
 ### Reference #
 

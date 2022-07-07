@@ -28,7 +28,7 @@ The 3D-SeqFISH analysis toolbox integrates EASIFISH (Expansion-Assisted Iterativ
 ### News and plans #
 - Released the 3D-SeqFISH github page on 7/2/22
 - Tested FPFH on 7/4/22
-- Determined the threshold for radius on 7/5/22
+- Determined the threshold for radius on 7/4/22
 - Grouping registration scripts and evaluation on 7/4/22
 - Generated shuffled point clouds on 7/7/22
 - Test RANSAC-ICP on 7/8/22
@@ -36,7 +36,7 @@ The 3D-SeqFISH analysis toolbox integrates EASIFISH (Expansion-Assisted Iterativ
 - Add 3D-SeqFISH individual scripts on 7/10/22
 - Summary of 3D-SeqFISH decoding results for a single tile image on 7/11/22
 - Test deep learning methods for registration by 8/1/22
-- Add decoding analysis by 9/1/22
+- Test and add decoding analysis by 9/1/22
 - Test 3D-SeqFISH bash scripts by 9/1/22
 
 ## Installation #
@@ -90,7 +90,8 @@ Preprocessing for 3D-SeqFISH is based on EASIFISH (Expansion-Assisted Iterative 
 - Correct the chromatic abberation or the misalignment of image tracks will always be the initial step. Image-assisted or point feature based point cloud registratio with RANSAC + ICP has been used for registering green and red channel spots. Spots here can be lipofuscins, dual color probes, or multicolor beads.
 - Point cloud registration can be executed as part of the 3D-SeqFISH pipeline. It also can be installed and used seperately. <br/>
 - To accurately register the point clouds of multiple rounds and find the best way for it, we have applied 3 strageties to register the FISH spots: 1) image-assisted point cloud registratio with RANSAC + ICP; 2) point cloud registratio with FPFH-RANSAC + ICP; 3) point cloud registratio with PFH-RANSAC + RANSAC-ICP (to be tested). <br/>
-1) Image-assisted point cloud registratio with RANSAC + ICP: we use ransac-affine methods (can be also found in the bigstream registration) for global registering the point clouds by correlating the DAPI/FISH image context. Specficially, we first use the correlation of the DAPI context for DAPI blobs to do the ransac-affine, and use ICP-affine to finely register the DAPI channel. Next, we apply the DAPI transformation to spots of each FISH channel and the track transformation to spots of green and magenta channel. Then, we correlated the FISH image context for FISH spots of each cell to perform later ransac-affine and do ICP-affine to register the point clouds for all FISH channels of all rounds. <br/>
+1) Image-assisted point cloud registratio with RANSAC + ICP <br/>
+- We use ransac-affine methods (can be also found in the bigstream registration) for global registering the point clouds by correlating the DAPI/FISH image context. Specficially, we first use the correlation of the DAPI context for DAPI blobs to do the ransac-affine, and use ICP-affine to finely register the DAPI channel. Next, we apply the DAPI transformation to spots of each FISH channel and the track transformation to spots of green and magenta channel. Then, we correlated the FISH image context for FISH spots of each cell to perform later ransac-affine and do ICP-affine to register the point clouds for all FISH channels of all rounds. <br/>
 ![](/Diagrams/3DseqFISH_diagram_v1_DAPI.png)
 2) Point cloud registration with FPFH-RANSAC + ICP <br/>
 - The step of this method does not extract features from the image (no image will be generated and used here), but only use features from the point clouds (here is the fast point feature histogram, FPFH). The detailed steps are: a) we use ransac-affine for global registering the point clouds with DAPI blobs, and do ICP-affine to finely register the DAPI channel. But this step can be omitted. b) we apply the DAPI transformation to spots of each FISH channel and the track transformation to spots of green and magenta channels. Then, we correlated the point feature for FISH spots of each cell to perform local ransac-affine and do ICP-affine to register the point clouds for all FISH channels of all rounds. <br/>
@@ -105,7 +106,7 @@ Preprocessing for 3D-SeqFISH is based on EASIFISH (Expansion-Assisted Iterative 
 
 ### Barcoding and decoding analysis #
 - We benefit from the idea of [seqFISH](https://github.com/CaiGroup/seqFISH-PLUS) and [HCR 3.0](https://www.molecularinstruments.com/hcr-rnafish-products) for our 3D-seqFISH barcoding and decoding. For barcoding the genes, 3 different channels of FISH images acquired with lightsheet microscope will be used and 4 rounds of EASIFISH will be run for encoding 81 genes. 3-6 extra rounds will be conducted for error correction, increasing the decoding efficiency and probing dense expressed genes with non-combinatorial FISH. <br/>
-- For decoding the genes for our seqFISH images and spots, we choose 1 μm as the best threshold radius to determine the colocalized spots of each rounds, which is validated by [Youden's J Statistic](https://www.kaggle.com/code/willstone98/youden-s-j-statistic-for-threshold-determination/notebook)). <br/>
+- For decoding the genes for our seqFISH images and spots, we choose 1 μm as the best threshold radius to determine the colocalized spots of each rounds, which is validated by [Youden's J Statistic](https://www.kaggle.com/code/willstone98/youden-s-j-statistic-for-threshold-determination/notebook). <br/>
 - For increase the detection efficency, the nearest 3 spots for a specific barcode bit will be used for searching the most correlated code of a specific gene. <br/>
 
 ## Pipeline #

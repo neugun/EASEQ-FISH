@@ -1,4 +1,4 @@
-## 3D-SeqFISH analysis toolbox
+## EXSEQ-FISH analysis toolbox
 
 ## Table of Contents #
    * [Description](#description)
@@ -22,28 +22,28 @@
 
 ## Description #
 
-The 3D-SeqFISH analysis toolbox integrates EASIFISH (Expansion-Assisted Iterative Fluorescence *In Situ* Hybridization) pipeline and 3D registration method for analyzing image-based 3D spatial transcriptomic data. We aim to provide the general solution for 3D spatial transcriptome, including automated image stitching, 3D cell segmentation, distributed spot detection, highly accurate multi-round 3D FISH spot registration (nm-level accuracy), and efficiently decoding hundreds of genes for thick tissues.  <br/><br/>
+The EXSEQ-FISH analysis toolbox integrates EASIFISH (Expansion-Assisted Iterative Fluorescence *In Situ* Hybridization) pipeline and 3D registration method for analyzing image-based 3D spatial transcriptomic data. We aim to provide the general solution for 3D spatial transcriptome, including automated image stitching, 3D cell segmentation, distributed spot detection, highly accurate multi-round 3D FISH spot registration (nm-level accuracy), and efficiently decoding hundreds of genes for thick tissues.  <br/><br/>
 ![](/Diagrams/3DseqFISH_diagram_v1.png)
 
 ### News and plans #
-- Released the 3D-SeqFISH github page on 7/2/22
+- Released the EXSEQ-FISH github page on 7/2/22
 - Tested FPFH on 7/4/22
 - Determined the threshold for radius on 7/4/22
 - Grouping registration scripts and evaluation on 7/4/22
 - Generated shuffled point clouds on 7/7/22
 - Test RANSAC-ICP on 7/8/22
 - Test PFH on 7/8/22
-- Add 3D-SeqFISH individual scripts on 7/10/22
-- Summary of 3D-SeqFISH decoding results for a single tile image on 7/11/22
+- Add EXSEQ-FISH individual scripts on 7/10/22
+- Summary of EXSEQ-FISH decoding results for a single tile image on 7/11/22
 - Test deep learning methods for registration by 8/1/22
 - Test and add decoding analysis by 9/1/22
-- Test 3D-SeqFISH bash scripts by 9/1/22
+- Test EXSEQ-FISH bash scripts by 9/1/22
 
 ## Installation #
 
 `3D-SeqFISH` analysis are inspired by point cloud registration and seqFISH decoding methods. Python >= 3.6 required,jupyter notebook,matplotlib,numpy,math,cv2,skimage,scipy,pandas,seaborn,zarr,z5py,qt5 packages are installed inside a anaconda envioronment (python 3.8.12), and it can be installed with `pip`:
 ```
-   pip install 3D-SeqFISH
+   pip install EXSEQ-FISH
 ```
    pip install pclpy==0.11.0 # Python == 3.6 required
 ```
@@ -53,7 +53,7 @@ The 3D-SeqFISH analysis toolbox integrates EASIFISH (Expansion-Assisted Iterativ
    pip install open3D
 ```
 
-Preprocessing for 3D-SeqFISH is based on EASIFISH (Expansion-Assisted Iterative Fluorescence *In Situ* Hybridization), MULTIFISH, bigstream, napari, and stardist, etc. <br/> 
+Preprocessing for EXSEQ-FISH is based on EASIFISH (Expansion-Assisted Iterative Fluorescence *In Situ* Hybridization), MULTIFISH, bigstream, napari, and stardist, etc. <br/> 
 
 `bigstream`  can be installed with  `pip`:
 ```
